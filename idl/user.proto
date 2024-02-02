@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option go_package="./pb/user";
+
+service UserService{
+  rpc UserRegister(UserRequest) returns (UserResponse) {}
+  rpc UserLogin(UserLoginRequest) returns (UserResponse) {}
+  rpc UserInfo(UserInfoRequest) returns (UserResponse) {}
+}
+
+message UserRequest{
+  // @gotags: form:"username" json:"username"
+  string UserName = 1;
+  // @gotags: form:"password" json:"password"
+  string Password = 2;
+  // @gotags: form:"nickname" json:"nickname"
+  string Nickname = 3;
+  // @gotags: form:"avatar" json:"avatar"
+  string Avatar = 4;
+  // @gotags: form:"mobile" json:"mobile"
+  string Mobile = 5;
+}
+
+message UserLoginRequest{
+  // @gotags: form:"username" json:"username"
+  string Username = 1;
+  // @gotags: form:"password" json:"password"
+  string Password = 2;
+}
+
+message UserStreamRequest{
+  // @gotags: form:"user_ids" json:"user_ids"
+  repeated int64 UserIds = 1 [json_name="user_ids"];;
+}
+
+message UserStreamResponse{
+  // @gotags: form:"id"
+  uint64 Id = 1 [json_name="id"];
+  // @gotags: form:"nickname"
+  string NickName = 2 [json_name="nickname"];
+}
+
+message UserResponse{
+  // @gotags: form:"id" json:"id"
+  uint64 Id = 1;
+  // @gotags: form:"nickname" json:"nickname"
+  string NickName = 2;
+  // @gotags: form:"avatar" json:"avatar"
+  string Avatar = 3;
+  // @gotags: form:"mobile" json:"mobile"
+  string Mobile = 4;
+  // @gotags: form:"created_at" json:"created_at"
+  string CreatedAt = 5;
+}
+
+message UserInfoRequest{
+  // @gotags: form:"id" json:"id"
+  uint64 Id = 1;
+}
