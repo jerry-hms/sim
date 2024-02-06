@@ -19,6 +19,8 @@ func main() {
 	// 初始化rpc服务
 	rpc.Init()
 	go runServer()
+	fmt.Printf("gateway listen on %s\n", variable.ConfigYml.GetString("server.port"))
+
 	// 启动mq
 	go rabbitmq.InitRabbitMq()
 	// 优雅的关闭服务
@@ -28,7 +30,6 @@ func main() {
 		s := <-osSignals
 		fmt.Println("exit! ", s)
 	}
-	fmt.Printf("gateway listen on %s", variable.ConfigYml.GetString("server.port"))
 }
 
 func runServer() {

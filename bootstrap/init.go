@@ -8,7 +8,6 @@ import (
 	"sim/app/global/variable"
 	"sim/app/providers/queue"
 	"sim/app/services/sys_log"
-	"sim/app/services/websocket/client"
 	"sim/app/util/validator_translation"
 	"sim/app/util/websocket"
 	"sim/app/util/yml_config"
@@ -54,7 +53,7 @@ func init() {
 	if variable.ConfigYml.GetInt("websocket.Start") == 1 {
 		variable.WebsocketHub = websocket.CreateHubFactory()
 		// 启动客户端管理器
-		variable.WebsocketManage = client.CreateManage()
+		variable.WebsocketManage = websocket.CreateManage()
 		if Wh, ok := variable.WebsocketHub.(*websocket.Hub); ok {
 			go Wh.Run()
 		}

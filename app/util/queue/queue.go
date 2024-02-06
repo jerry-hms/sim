@@ -3,6 +3,7 @@ package queue
 import (
 	"encoding/json"
 	"fmt"
+	"go.uber.org/zap"
 	"sim/app/core/container"
 	"sim/app/global/consts"
 	"sim/app/global/variable"
@@ -15,15 +16,12 @@ const QueueMessageFormat string = `{"event": "%s", "data": %s}` // 队列消息�
 // Transfer 将队列转发到对应的处理方法
 func Transfer(receiveData string) {
 	var res map[string]interface{}
-	event := res["event"].(string)
 
 	if err := json.Unmarshal([]byte(receiveData), &res); err != nil {
-		fmt.Println("event数据解析失败", err.Error())
-		variable.ZapLog.Error(fmt.Sprintf(""))
+		variable.ZapLog.Error(fmt.Sprintf(consts.QueueDataTransErrorFormatMsg), zap.Error(err))
 	}
+	event := res["event"].(string)
 	params := res["data"]
-	fmt.Println("params", params)
-	fmt.Printf("params:%T\n", params)
 	queuePrefix := consts.QueuePrefix
 	contain := container.CreateContainersFactory()
 	// 从容器中取出一个实例
@@ -31,7 +29,7 @@ func Transfer(receiveData string) {
 	// 将实例转换为队列处理实例
 	queueInstance, ok := instance.(interf.QueueInterface)
 	if !ok {
-		fmt.Printf("%s is not implement QueueInterface")
+		variable.ZapLog.Error(fmt.Sprintf(consts.QueueNotImplementInterfaceErrorFormatMsg, event))
 	}
 	queueInstance.Handle(params)
 }
@@ -41,7 +39,6 @@ func Pusher(event string, data string, mode string, delay int) bool {
 	// 获取队列生产者
 	producer := GetQueuePusherMode(mode)
 	msg := fmt.Sprintf(QueueMessageFormat, event, data)
-	fmt.Println("最终发送的msg", msg)
 	return producer.Send(msg, delay)
 }
 

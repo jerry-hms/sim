@@ -39,3 +39,22 @@ services:
       - "8080:8080"
     networks:
       - sim
+
+  rabbitmq:
+    image: rabbitmq:3.9.13-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ~/var/docker/mq/rabbitmq/lib:/var/lib/rabbitmq
+      - ~/var/docker/mq/rabbitmq/etc:/etc/rabbitmq
+      - ~/var/docker/mq/rabbitmq/log:/var/log/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=rabbitmq-1
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=123456
+    networks:
+      - sim

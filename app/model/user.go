@@ -24,7 +24,7 @@ func (u *UserModel) TableName() string {
 	return "user"
 }
 
-// 注册
+// Register 注册
 func (u *UserModel) Register(user *UserModel) error {
 	var curUser UserModel
 

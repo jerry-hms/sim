@@ -10,7 +10,6 @@ import (
 )
 
 func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
-
 	// 获取程序所处的模式：  开发调试 、 生产
 	appDebug := variable.ConfigYml.GetBool("appDebug")
 
@@ -54,13 +53,13 @@ func CreateZapFactory(entry func(zapcore.Entry) error) *zap.Logger {
 	}
 
 	//写入器
-	fileName := variable.BasePath + variable.ConfigYml.GetString("logs.goSkeletonLogName")
+	fileName := variable.BasePath + variable.ConfigYml.GetString("logs.prodLogName")
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   fileName,                                     //日志文件的位置
-		MaxSize:    variable.ConfigYml.GetInt("logs.MaxSize"),    //在进行切割之前，日志文件的最大大小（以MB为单位）
-		MaxBackups: variable.ConfigYml.GetInt("logs.MaxBackups"), //保留旧文件的最大个数
-		MaxAge:     variable.ConfigYml.GetInt("logs.MaxAge"),     //保留旧文件的最大天数
-		Compress:   variable.ConfigYml.GetBool("logs.Compress"),  //是否压缩/归档旧文件
+		MaxSize:    variable.ConfigYml.GetInt("logs.maxSize"),    //在进行切割之前，日志文件的最大大小（以MB为单位）
+		MaxBackups: variable.ConfigYml.GetInt("logs.maxBackups"), //保留旧文件的最大个数
+		MaxAge:     variable.ConfigYml.GetInt("logs.maxAge"),     //保留旧文件的最大天数
+		Compress:   variable.ConfigYml.GetBool("logs.compress"),  //是否压缩/归档旧文件
 	}
 	writer := zapcore.AddSync(lumberJackLogger)
 	// 开始初始化zap日志核心参数，

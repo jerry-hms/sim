@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	apiV1 "sim/app/gateway/http/controller/api/v1"
+	userV1 "sim/app/gateway/http/controller/api/v1/user"
 	"sim/app/gateway/http/validator/core/data_transfer"
 	"sim/app/util/response"
 )
@@ -22,6 +22,6 @@ func (l Login) CheckParams(c *gin.Context) {
 	if context == nil {
 		response.Fail(c, "数据绑定失败", nil)
 	} else {
-		(&apiV1.User{}).Login(c)
+		(&userV1.User{}).Login(c)
 	}
 }

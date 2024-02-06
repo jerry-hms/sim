@@ -12,6 +12,15 @@ type Ws struct {
 	WsClient *websocket.Client
 }
 
+// Send 发送消息
+func (c *Ws) Send(recvId uint64, message interface{}) error {
+	client, err := websocket.CreateManage().GetClientIdByUid(recvId)
+	if err != nil {
+		return err
+	}
+	return client.SendJsonMessage(message)
+}
+
 func (w *Ws) OnOpen(context *gin.Context) (*Ws, bool) {
 	if client, ok := (&websocket.Client{}).OnOpen(context); ok {
 		w.WsClient = client

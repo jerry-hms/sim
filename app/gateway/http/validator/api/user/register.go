@@ -3,7 +3,7 @@ package user
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	apiV1 "sim/app/gateway/http/controller/api/v1"
+	userV1 "sim/app/gateway/http/controller/api/v1/user"
 	"sim/app/gateway/http/validator/core/data_transfer"
 	"sim/app/util/response"
 	userPb "sim/idl/pb/user"
@@ -11,8 +11,8 @@ import (
 
 type Register struct {
 	BaseField
-	Nickname string `json:"nickname" form:"nickname"`
-	Mobile   string `json:"mobile" form:"mobile" binding:"required"`
+	Nickname string `json:"nickname" form:"nickname" err_msg:"请输入用户昵称"`
+	Mobile   string `json:"mobile" form:"mobile" binding:"required" err_msg:"请输入手机号"`
 	Avatar   string `json:"avatar" form:"avatar"`
 }
 
@@ -34,6 +34,6 @@ func (r Register) CheckParams(c *gin.Context) {
 			response.Fail(c, "参数转换失败", nil)
 		}
 
-		(&apiV1.User{}).Register(c, &userReq)
+		(&userV1.User{}).Register(c, &userReq)
 	}
 }

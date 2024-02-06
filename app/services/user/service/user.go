@@ -44,7 +44,6 @@ func (u *UserSrv) UserRegister(ctx context.Context, req *pb.UserRequest) (resp *
 
 // UserLogin 用户登录
 func (u *UserSrv) UserLogin(ctx context.Context, req *pb.UserLoginRequest) (resp *pb.UserResponse, err error) {
-	//resp = new(pb.UserResponse)
 	user, err := model.CreateUserFactory().Login(req.Username, req.Password)
 	if err != nil {
 		return

@@ -23,4 +23,8 @@ const (
 
 	// 服务器内部错误
 	SystemErrorMsg string = "服务器内部代码错误"
+
+	// 队列相关
+	QueueDataTransErrorFormatMsg             string = "队列数据解析错误，请检查数据格式是否正确"
+	QueueNotImplementInterfaceErrorFormatMsg string = "%s is not implement QueueInterface"
 )

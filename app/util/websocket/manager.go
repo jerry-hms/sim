@@ -1,15 +1,15 @@
-package client
+package websocket
 
 import (
 	"errors"
 	"github.com/google/uuid"
-	"sim/app/util/websocket"
 	"sync"
 )
 
 var Instance *Manage
 var InstanceOnce sync.Once
 
+// Manage websocket客户端管理器
 type Manage struct {
 	Maps map[uint64]uuid.UUID
 }
@@ -32,9 +32,9 @@ func (m *Manage) GetClientId(uid uint64) uuid.UUID {
 }
 
 // GetClientIdByUid 根据uid获取ws客户端
-func (m *Manage) GetClientIdByUid(uid uint64) (*websocket.Client, error) {
+func (m *Manage) GetClientIdByUid(uid uint64) (*Client, error) {
 	clientId := m.GetClientId(uid)
-	client := websocket.CreateHubFactory().GetClientByClientId(clientId)
+	client := CreateHubFactory().GetClientByClientId(clientId)
 	if client == nil {
 		return nil, errors.New("客户端不存在")
 	}

@@ -5,9 +5,9 @@ import (
 	"github.com/google/uuid"
 	"sim/app/gateway/rpc"
 	"sim/app/global/variable"
-	"sim/app/services/websocket/client"
 	"sim/app/util/jwt"
 	"sim/app/util/response"
+	"sim/app/util/websocket"
 	pb "sim/idl/pb/im"
 )
 
@@ -24,7 +24,7 @@ func (c *ImControl) BindToWs(ctx *gin.Context) {
 		response.Fail(ctx, "client_id不合法", nil)
 		return
 	}
-	manage, _ := variable.WebsocketManage.(*client.Manage)
+	manage, _ := variable.WebsocketManage.(*websocket.Manage)
 	if ok := manage.BindUidToClientId(u.Info.Id, cid); !ok {
 		response.Fail(ctx, "绑定失败", nil)
 		return

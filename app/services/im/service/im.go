@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sim/app/global/variable"
 	imCore "sim/app/services/im/core"
 	"sim/app/services/im/rpc"
 	"sim/app/util/queue"
@@ -46,7 +47,7 @@ func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, err
 	// 将消息投递到队列中
 	s := queue.Pusher("send_message", qMsg, "publish_subscribe", 0)
 	if s {
-		fmt.Println("消息投递成功")
+		variable.ZapLog.Error("消息投递成功")
 	}
 	sendResp := &pb.SendResponse{}
 	sendResp.MessageId = message.MessageId

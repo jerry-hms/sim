@@ -1,9 +1,9 @@
 package listeners
 
 import (
-	"fmt"
+	"sim/app/global/variable"
 	"sim/app/services/im/core"
-	"sim/app/services/websocket/client"
+	"sim/app/services/websocket"
 	"sim/app/util/tools"
 )
 
@@ -13,13 +13,12 @@ type SendMessageListener struct {
 }
 
 func (s *SendMessageListener) Handle(params interface{}) {
-	fmt.Println("ppp", params)
 	err := tools.InterfaceToStruct(params, &s)
 	if err != nil {
-		fmt.Println("绑定失败", err.Error())
+		variable.ZapLog.Error("队列[send_message]数据绑定失败")
 	}
-	if err = client.GetWsClient().Send(s.RecvId, s.Message); err == nil {
-		fmt.Println("发送成功")
+	if err = (&websocket.Ws{}).Send(s.RecvId, s.Message); err == nil {
+		variable.ZapLog.Info("队列[send_message]发送成功")
 	}
 
 }
