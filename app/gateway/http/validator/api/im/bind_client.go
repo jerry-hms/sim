@@ -3,7 +3,7 @@ package im
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	apiV1 "sim/app/gateway/http/controller/api/v1"
+	apiV1 "sim/app/gateway/http/controller/api/v1/im"
 	"sim/app/gateway/http/validator/core/data_transfer"
 	"sim/app/gateway/http/validator/core/verify_params"
 	"sim/app/util/response"
@@ -33,6 +33,6 @@ func (b Bind) CheckParams(c *gin.Context) {
 		response.ValidatorFail(c, "参数绑定失败")
 		return
 	} else {
-		(&apiV1.Chat{}).BindToWs(c)
+		(&apiV1.ImControl{}).BindToWs(c)
 	}
 }

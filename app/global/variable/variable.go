@@ -29,6 +29,9 @@ var (
 	WebsocketHandshakeSuccess = `{"code":200,"msg":"ws连接成功","data": {"client_id": "%s"}}`
 	WebsocketServerPingMsg    = "Server->Ping->Client"
 
+	// websocket客户端管理
+	WebsocketManage interface{}
+
 	//  用户自行定义其他全局变量 ↓
 
 )

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"sim/app/gateway/rpc"
+	"sim/app/global/variable"
 	"sim/app/services/websocket/client"
 	"sim/app/util/jwt"
 	"sim/app/util/response"
@@ -11,12 +12,6 @@ import (
 )
 
 type ImControl struct {
-}
-
-func (i *ImControl) Ws() {
-	if serviceWs, ok := w.OnOpen(c); ok {
-		w.OnMessage(serviceWs, c)
-	}
 }
 
 func (c *ImControl) BindToWs(ctx *gin.Context) {
@@ -29,8 +24,8 @@ func (c *ImControl) BindToWs(ctx *gin.Context) {
 		response.Fail(ctx, "client_id不合法", nil)
 		return
 	}
-	wsClientManage := client.CreateManage()
-	if ok := wsClientManage.BindUidToClientId(u.Info.Id, cid); !ok {
+	manage, _ := variable.WebsocketManage.(*client.Manage)
+	if ok := manage.BindUidToClientId(u.Info.Id, cid); !ok {
 		response.Fail(ctx, "绑定失败", nil)
 		return
 	}

@@ -40,12 +40,3 @@ func (m *Manage) GetClientIdByUid(uid uint64) (*websocket.Client, error) {
 	}
 	return client, nil
 }
-
-// Send 发送消息
-func (m *Manage) Send(recv_id uint64, message interface{}) error {
-	client, err := m.GetClientIdByUid(recv_id)
-	if err != nil {
-		return err
-	}
-	return client.SendJsonMessage(message)
-}

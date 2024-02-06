@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  hms_go:
+  sim:
     driver: bridge
 
 services:
@@ -23,7 +23,7 @@ services:
       - ETCD_AUTH_USER="todolist"
       - ETCD_AUTH_PASSWORD="todolist"
     networks:
-      - hms_go
+      - sim
 
   etcd-keeper:
     image: "evildecay/etcdkeeper:latest"
@@ -38,4 +38,4 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - hms_go
+      - sim

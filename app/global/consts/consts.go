@@ -16,4 +16,7 @@ const (
 	TokenParseErrorMsg   string = "token解析错误"
 	TokenInvalidErrorMsg string = "无效的token"
 	TokenExpiredErrorMsg string = "token已过期"
+
+	// 队列相关
+	QueuePrefix string = "sim_queue_" //队列前缀
 )

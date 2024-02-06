@@ -1,5 +1,7 @@
 server:
   port: ":1024"
+jwt:
+  signKey: jerry
 
 services:
   gateway:
@@ -41,5 +43,14 @@ websocket:
   ReadDeadline: 50                   # 客户端在线情况下，正常的业务消息间隔秒数必须小于该值，否则服务器将会主动断开，该值不能小于心跳频率*允许失败次数,单位：秒。 0 表示不设限制，即服务器不主动断开不发送任何消息的在线客户端，但会消耗服务器资源
   WriteDeadline: 35                   # 消息单次写入超时时间，单位：秒
 
-jwt:
-  signKey: jerry
+rabbitMq:
+  publishSubscribe:
+    addr: amqp://账号:密码@127.0.0.1:5672//sim           #消息服务器地址、账号、密码
+    exchangeType: "fanout"
+    exchangeName: "fanout_exchange"                       #即时消息队列名称，
+    delayedExchangeName: "delayed_fanout_exchange"        #延迟消息队列名称，必须事先在rabbitmq 服务器管理端手动创建
+    durable: false                                        #消息是否持久化，如果初始化的是延迟消息队列,那么该参数会被程序强制设置为 true
+    queueName: ""                                         #队列名称，为空 表示所有订阅的消费者（consumer）都可以接受到同样的消息，如果设置名称，会导致只有最后一个启动的消费者能接受到消息。
+    consumerChanNumber: 1                                 #消费者通道数量（发布、订阅模式消费者使用一个通道，避免多个通道重复收到数据）
+    offLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
+    retryCount: 5                                         #消费者掉线后,尝试重连最大次数

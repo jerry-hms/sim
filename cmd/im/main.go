@@ -27,7 +27,6 @@ func main() {
 	etcdRegister := discovery.NewRegister(etcdAddress, logrus.New())
 	defer etcdRegister.Stop()
 
-	// im rpc服务开启
 	grpcAddress := fmt.Sprintf("%s:%s",
 		variable.ConfigYml.GetStringSlice("services.im.host"),
 		*port)
@@ -53,5 +52,4 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("启动成功")
 }

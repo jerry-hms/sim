@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"sim/app/gateway/rpc"
 	"sim/app/global/variable"
+	"sim/app/util/rabbitmq"
 	"sim/app/util/shutdown"
 	_ "sim/bootstrap"
 	"sim/routes"
@@ -18,6 +19,8 @@ func main() {
 	// 初始化rpc服务
 	rpc.Init()
 	go runServer()
+	// 启动mq
+	go rabbitmq.BootMq()
 	// 优雅的关闭服务
 	{
 		osSignals := make(chan os.Signal, 1)
@@ -25,7 +28,6 @@ func main() {
 		s := <-osSignals
 		fmt.Println("exit! ", s)
 	}
-
 	fmt.Printf("gateway listen on %s", variable.ConfigYml.GetString("server.port"))
 }
 

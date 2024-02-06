@@ -88,6 +88,7 @@ func (c *Client) SendMessage(messageType int, message string) error {
 	return nil
 }
 
+// SendJsonMessage 发送json消息
 func (c *Client) SendJsonMessage(message interface{}) error {
 	msg, err := json.Marshal(message)
 	if err != nil {
