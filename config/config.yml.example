@@ -1,7 +1,9 @@
+appDebug: true
+
 server:
   port: ":1024"
 jwt:
-  signKey: jerry
+  signKey: sim
 
 services:
   gateway:
@@ -27,7 +29,7 @@ mysql:
   port: 3306
   database: my_prod
   username: root
-  password: 123456
+  password: root
   charset: utf8mb4
   prefix: my_
 
@@ -54,3 +56,13 @@ rabbitMq:
     consumerChanNumber: 1                                 #消费者通道数量（发布、订阅模式消费者使用一个通道，避免多个通道重复收到数据）
     offLineReconnectIntervalSec: 10                       #消费者掉线后,重连间隔的秒数
     retryCount: 5                                         #消费者掉线后,尝试重连最大次数
+
+logs:
+  ginLogName: "/storage/logs/gin.log"                   #设置 gin 框架的接口访问日志
+  prodLogName: "/storage/logs/sim.log"                  #设置sim项目骨架运行时日志文件名，注意该名称不要与上一条重复 ,避免和 gin 框架的日志掺杂一起，造成混乱。
+  textFormat: "json"                                    #记录日志的格式，参数选项：console、json ， console 表示一般的文本格式
+  timePrecision: "millisecond"                          #记录日志时，相关的时间精度，该参数选项：second  、 millisecond ， 分别表示 秒 和 毫秒 ,默认为毫秒级别
+  maxSize: 10                                           #每个日志的最大尺寸(以MB为单位）， 超过该值，系统将会自动进行切割
+  maxBackups: 7                                         #保留旧日志最大个数
+  maxAge: 15                                            #保留旧日志最大天数
+  compress: false                                       #日志备份时，是否进行压缩

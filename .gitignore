@@ -1,4 +1,6 @@
 /.idea/
 .idea/
 .idea
+/public/storage
+/storage/logs
 config/config.yml

@@ -20,11 +20,11 @@ var (
 
 	// 全局日志指针
 	ZapLog *zap.Logger
+
 	// 全局配置文件
 	ConfigYml interf.YmlConfigInterf // 全局配置文件指针
-	//ConfigGormv2Yml interf.YmlConfigInterf // 全局配置文件指针
 
-	//websocket
+	//websocket相关的全局配置
 	WebsocketHub              interface{}
 	WebsocketHandshakeSuccess = `{"code":200,"msg":"ws连接成功","data": {"client_id": "%s"}}`
 	WebsocketServerPingMsg    = "Server->Ping->Client"
@@ -32,7 +32,7 @@ var (
 	// websocket客户端管理
 	WebsocketManage interface{}
 
-	//  用户自行定义其他全局变量 ↓
+	// 自行定义其他全局变量 ↓
 
 )
 
