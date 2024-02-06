@@ -64,3 +64,9 @@ make proto      // 生成rpc服务所需的protoc文件
 ```
 
 ### 启动项目
+#### step1 启动项目环境
+`make env-up`
+#### step2 启动各服务
+`make im && make user && make gateway`
+
+最后访问`http://localhost:1024`即可
