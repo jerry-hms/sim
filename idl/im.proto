@@ -2,7 +2,6 @@ syntax = "proto3";
 
 option go_package="./pb/im";
 
-
 service ImService{
   rpc Send(SendRequest) returns(SendResponse);
 }
@@ -10,12 +9,18 @@ service ImService{
 message SendRequest{
   // @gotags: json:"recv_id" form:"recv_id"
   uint64 RecvId = 1;
-  // @gotags: json:"message" form:"message"
-  string  Content = 2;
+  // @gotags: json:"content" form:"content"
+  string Content = 2;
   // @gotags: json:"type" form:"type"
   string Type = 3;
   // @gotags: json:"scene" form:"scene"
   string Scene = 4;
+  // @gotags: json:"url" form:"url"
+  string Url = 5;
+  // @gotags: json:"height" form:"height"
+  int64 Height = 6;
+  // @gotags: json:"width" form:"width"
+  int64 Width = 7;
 }
 
 message SendResponse{

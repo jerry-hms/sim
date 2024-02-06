@@ -1,4 +1,4 @@
-package v1
+package im
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,10 +10,16 @@ import (
 	pb "sim/idl/pb/im"
 )
 
-type Chat struct {
+type ImControl struct {
 }
 
-func (c *Chat) BindToWs(ctx *gin.Context) {
+func (i *ImControl) Ws() {
+	if serviceWs, ok := w.OnOpen(c); ok {
+		w.OnMessage(serviceWs, c)
+	}
+}
+
+func (c *ImControl) BindToWs(ctx *gin.Context) {
 	clientId := ctx.GetString("client_id")
 	jwtUser, _ := ctx.Get("user")
 
@@ -29,22 +35,19 @@ func (c *Chat) BindToWs(ctx *gin.Context) {
 		return
 	}
 
-	wsClientManage.Send(u.Info.Id, gin.H{
-		"msg": "成功建立绑定",
-	})
-	if err != nil {
-		response.Fail(ctx, "发送失败", nil)
-		return
-	}
-	response.Success(ctx, "发送成功", nil)
+	response.Success(ctx, "绑定成功", nil)
 }
 
-func (c *Chat) Send(ctx *gin.Context) {
+// Send 聊天消息发送
+func (c *ImControl) Send(ctx *gin.Context) {
 	req := &pb.SendRequest{
 		RecvId:  uint64(ctx.GetFloat64("recv_id")),
 		Content: ctx.GetString("content"),
 		Type:    ctx.GetString("type"),
 		Scene:   ctx.GetString("scene"),
+		Url:     ctx.GetString("url"),
+		Width:   int64(ctx.GetFloat64("width")),
+		Height:  int64(ctx.GetFloat64("height")),
 	}
 
 	send, err := rpc.ImClient.Send(ctx, req)
