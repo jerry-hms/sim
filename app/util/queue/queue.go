@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sim/app/core/container"
 	"sim/app/global/consts"
+	"sim/app/global/variable"
 	"sim/app/util/queue/interf"
 	"sim/app/util/rabbitmq/publish_subscribe"
 )
@@ -14,10 +15,12 @@ const QueueMessageFormat string = `{"event": "%s", "data": %s}` // 队列消息�
 // Transfer 将队列转发到对应的处理方法
 func Transfer(receiveData string) {
 	var res map[string]interface{}
-	if err := json.Unmarshal([]byte(receiveData), &res); err != nil {
-		fmt.Println("数据解析失败", err.Error())
-	}
 	event := res["event"].(string)
+
+	if err := json.Unmarshal([]byte(receiveData), &res); err != nil {
+		fmt.Println("event数据解析失败", err.Error())
+		variable.ZapLog.Error(fmt.Sprintf(""))
+	}
 	params := res["data"]
 	fmt.Println("params", params)
 	fmt.Printf("params:%T\n", params)

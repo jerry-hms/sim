@@ -14,13 +14,13 @@ type Login struct {
 func (l Login) CheckParams(c *gin.Context) {
 	err := c.ShouldBind(&l)
 	if err != nil {
-		response.ValidatorFail(c, err.Error())
+		response.ValidatorError(c, l, err)
 		return
 	}
 
 	context := data_transfer.DataAddContext(l, "", c)
 	if context == nil {
-		response.ValidatorFail(c, "数据绑定失败")
+		response.Fail(c, "数据绑定失败", nil)
 	} else {
 		(&apiV1.User{}).Login(c)
 	}

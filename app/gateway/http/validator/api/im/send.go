@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	imControl "sim/app/gateway/http/controller/api/v1/im"
 	"sim/app/gateway/http/validator/core/data_transfer"
-	"sim/app/gateway/http/validator/core/verify_params"
 	"sim/app/util/response"
 )
 
@@ -21,23 +20,23 @@ type Message struct {
 func (m *Message) CheckParams(c *gin.Context) {
 	err := c.ShouldBind(&m)
 	if err != nil {
-		response.ValidatorFail(c, "参数绑定失败")
+		response.ValidatorError(c, m, err)
 		return
 	}
 
-	verify, err := verify_params.Verify(m)
-	if err != nil {
-		response.ValidatorFail(c, "验证器故障")
-		return
-	}
-	if verify != "" {
-		response.ValidatorFail(c, verify)
-		return
-	}
+	//verify, err := verify_params.Verify(m)
+	//if err != nil {
+	//	response.ValidatorFail(c, "验证器故障")
+	//	return
+	//}
+	//if verify != "" {
+	//	response.ValidatorFail(c, verify)
+	//	return
+	//}
 	if context := data_transfer.DataAddContext(m, "", c); context != nil {
 		(&imControl.ImControl{}).Send(c)
 	} else {
-		response.ValidatorFail(c, "参数绑定失败")
+		response.Fail(c, "参数绑定失败", nil)
 		return
 	}
 }

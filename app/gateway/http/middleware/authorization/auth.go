@@ -21,7 +21,7 @@ func CheckLogin(c *gin.Context) {
 	}
 	tokenArr := strings.Split(header.Authorization, " ")
 	if len(tokenArr) != 2 {
-		response.TokenError(c, consts.TokenInvalidError)
+		response.TokenError(c, consts.TokenFormatError)
 		return
 	}
 	user, code := token.CreateUserTokenFactory().IsEffective(tokenArr[1])

@@ -31,8 +31,6 @@ func (u *UserToken) GenerateToken(user interface{}, expiredAt int64) (string, er
 		return "", errors.New("user转换UserResponse失败")
 	}
 	claims.Info = *userInfo
-	//jsonStr, _ := json.Marshal(user)
-	//_ = json.Unmarshal(jsonStr, &claims)
 	claims.StandardClaims.NotBefore = time.Now().Unix() - 10        // 生效开始时间 给个10秒的浮动区间
 	claims.StandardClaims.ExpiresAt = time.Now().Unix() + expiredAt // 有效时间
 

@@ -9,6 +9,7 @@ import (
 	"sim/app/providers/queue"
 	"sim/app/services/sys_log"
 	"sim/app/services/websocket/client"
+	"sim/app/util/validator_translation"
 	"sim/app/util/websocket"
 	"sim/app/util/yml_config"
 	"sim/app/util/zap"
@@ -51,7 +52,6 @@ func init() {
 
 	// 开启websocket服务
 	if variable.ConfigYml.GetInt("websocket.Start") == 1 {
-
 		variable.WebsocketHub = websocket.CreateHubFactory()
 		// 启动客户端管理器
 		variable.WebsocketManage = client.CreateManage()
@@ -59,6 +59,12 @@ func init() {
 			go Wh.Run()
 		}
 	}
+	// 初始化表单验证器
+	err := validator_translation.InitTrans("zh")
+	if err != nil {
+		return
+	}
+
 	// 将队列处理handle注入容器
 	queue.RegisterQueue()
 }

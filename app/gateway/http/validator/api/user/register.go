@@ -18,7 +18,7 @@ type Register struct {
 
 func (r Register) CheckParams(c *gin.Context) {
 	if err := c.ShouldBind(&r); err != nil {
-		response.ValidatorFail(c, "参数校验失败")
+		response.ValidatorError(c, r, err)
 		return
 	}
 	// 将参数绑定到context上，在后续方法中方便使用

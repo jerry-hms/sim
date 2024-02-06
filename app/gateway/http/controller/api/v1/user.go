@@ -34,7 +34,7 @@ func (u *User) Login(c *gin.Context) {
 	}
 	token, err := token.CreateUserTokenFactory().GenerateToken(user, 24*60*60)
 	if err != nil {
-		response.Fail(c, err.Error(), nil)
+		response.Fail(c, "token生成失败", nil)
 		return
 	}
 	response.Success(c, "登录成功", gin.H{

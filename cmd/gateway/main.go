@@ -20,7 +20,7 @@ func main() {
 	rpc.Init()
 	go runServer()
 	// 启动mq
-	go rabbitmq.BootMq()
+	go rabbitmq.InitRabbitMq()
 	// 优雅的关闭服务
 	{
 		osSignals := make(chan os.Signal, 1)
@@ -42,7 +42,7 @@ func runServer() {
 	}
 
 	if err := server.ListenAndServe(); err != nil {
-		fmt.Printf("网关启动报错: %s", err.Error())
+		fmt.Printf("网关启动报错: %s\n", err.Error())
 	}
 
 	go func() {

@@ -7,7 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 	"net/http"
+	"sim/app/global/consts"
 	"sim/app/global/variable"
 	"sync"
 	"time"
@@ -31,7 +33,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				fmt.Println("websocket报错:", val)
+				variable.ZapLog.Error(consts.WebsocketOnOpenFailMsg, zap.Error(val))
 			}
 		}
 	}()
@@ -46,7 +48,7 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 
 	// 将http协议升级到websocket，然后返回一个长连接客户端
 	if wsConn, err := upgrade.Upgrade(context.Writer, context.Request, nil); err != nil {
-		fmt.Println("websocket协议升级报错:", err.Error())
+		variable.ZapLog.Error(consts.WebsocketUpgradeFailMsg, zap.Error(err))
 		return nil, false
 	} else {
 
@@ -64,8 +66,8 @@ func (c *Client) OnOpen(context *gin.Context) (*Client, bool) {
 		c.State = 1
 
 		c.ClientId = uuid.New()
-		if err := c.SendMessage(websocket.TextMessage, fmt.Sprintf(variable.WebsocketHandshakeSuccess, c.ClientId)); err != nil {
-			fmt.Println("websocket连接成功，发送打招呼消息失败", err.Error())
+		if err = c.SendMessage(websocket.TextMessage, fmt.Sprintf(variable.WebsocketHandshakeSuccess, c.ClientId)); err != nil {
+			variable.ZapLog.Error(consts.WebsocketSendMessageFailMsg, zap.Error(err))
 		}
 
 		return c, true
@@ -104,7 +106,7 @@ func (c *Client) ReadPump(callBackOnMessage func(messageType int, message []byte
 		err := recover()
 		if err != nil {
 			if realErr, ok := err.(error); ok {
-				fmt.Println("服务器发生错误", realErr)
+				variable.ZapLog.Error(consts.WebsocketReadPumpFailMsg, zap.Error(realErr))
 			}
 		}
 		callBackOnClose()
@@ -120,7 +122,7 @@ func (c *Client) ReadPump(callBackOnMessage func(messageType int, message []byte
 				break
 			}
 		} else {
-			callBackOnError(errors.New("客户端已下线"))
+			callBackOnError(errors.New(consts.WebsocketClientLogoutMsg))
 			break
 		}
 	}
@@ -133,7 +135,7 @@ func (c *Client) HeartBeat() {
 		err := recover()
 		if err != nil {
 			if val, ok := err.(error); ok {
-				fmt.Println("发生错误，监测中断：", val.Error())
+				variable.ZapLog.Error(consts.WebsocketHeartFailMsg, zap.Error(val))
 			}
 		}
 		ticker.Stop()
@@ -145,7 +147,6 @@ func (c *Client) HeartBeat() {
 		_ = c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline))
 	}
 	c.Conn.SetPongHandler(func(receivedPong string) error {
-		fmt.Println("收到客户端的pong", receivedPong)
 		if c.ReadDeadline > time.Nanosecond {
 			_ = c.Conn.SetReadDeadline(time.Now().Add(c.ReadDeadline))
 		} else {
@@ -162,7 +163,6 @@ func (c *Client) HeartBeat() {
 				if err != nil {
 					c.HeartbeatFailTimes++
 					if c.HeartbeatFailTimes > variable.ConfigYml.GetInt("websocket.HeartbeatFailMaxTimes") {
-						fmt.Println("发送心跳包失败")
 						c.State = 0
 						c.Hub.UnRegister <- c
 						return
