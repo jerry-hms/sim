@@ -1,6 +1,7 @@
 package listeners
 
 import (
+	"go.uber.org/zap"
 	"sim/app/global/variable"
 	"sim/app/services/im/core"
 	"sim/app/services/websocket"
@@ -20,5 +21,5 @@ func (s *SendMessageListener) Handle(params interface{}) {
 	if err = (&websocket.Ws{}).Send(s.RecvId, s.Message); err == nil {
 		variable.ZapLog.Info("队列[send_message]发送成功")
 	}
-
+	variable.ZapLog.Info("队列[send_message]发送失败", zap.Error(err))
 }

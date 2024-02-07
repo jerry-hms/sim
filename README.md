@@ -17,28 +17,28 @@
 ### 项目结构
 ```text
 sim /
-|—— app                 // 项目应用
-|  |—— core              // 框架内核
-|  |—— gateway           // 网关服务
-|     |—— http            // 包含控制器、中间件、表单验证登，应用请求处理逻辑都放这里
-|     └── rpc             // 注册请求处理需要的rpc服务
-|  |—— global            // 包含框架全局的常量、变量
-|  |—— listeners         // 存放事件监听handle
-|  |—— model             // 数据模型
-|  |—— providers         // 服务注册
-|  |—— services          // rpc服务
-|  └── util              // 应用内自定义的一些包
-|—— bootstrap           // 启动项目运行所需要的所有包
-|—— cmd                 // 服务启动
-|   |—— gateway         // 网关服务启动
-|   |—— im              // im rpc服务启动
-|   └── user            // user rpc服务启动
-|—— config              // 配置文件
-|—— database            // 数据库文件
-|—— idl                 // protobuf文件
-|—— public              // 存放共用静态文件
-|—— routes              // 路由文件目录
-└── storage             // 存储运行日志、上传文件等
+|—— app                     // 项目应用
+|  |—— core                 // 框架内核
+|  |—— gateway              // 网关服务
+|     |—— http              // 包含控制器、中间件、表单验证登，应用请求处理逻辑都放这里
+|     └── rpc               // 注册请求处理需要的rpc服务
+|  |—— global               // 包含框架全局的常量、变量
+|  |—— listeners            // 存放事件监听handle
+|  |—— model                // 数据模型
+|  |—— providers            // 服务注册
+|  |—— services             // rpc服务
+|  └── util                 // 应用内自定义的一些包
+|—— bootstrap               // 启动项目运行所需要的所有包
+|—— cmd                     // 服务启动
+|   |—— gateway             // 网关服务启动
+|   |—— im                  // im rpc服务启动
+|   └── user                // user rpc服务启动
+|—— config                  // 配置文件
+|—— database                // 数据库文件
+|—— idl                     // protobuf文件
+|—— public                  // 存放共用静态文件
+|—— routes                  // 路由文件目录
+└── storage                 // 存储运行日志、上传文件等
 ```
 
 ### 项目说明

@@ -1,8 +1,9 @@
 DIR = $(shell pwd)/app
 
 IDL_PATH = $(shell pwd)/idl
+PORT ?= 10001
 
-SERVICES := gateway im user
+SERVICES := im user
 service = $(word 1, $@)
 
 node = 0
@@ -18,6 +19,11 @@ proto:
 
 .PHONY: $(SERVICES)
 $(SERVICES):
+	go build -o $(BIN)/$(service)_$(PORT) -ldflags="-X 'main.Port=$(PORT)'" $(shell pwd)/cmd/$(service)
+	$(BIN)/$(service)_$(PORT)
+
+.PHONY: gateway
+gateway:
 	go build -o $(BIN)/$(service) $(shell pwd)/cmd/$(service)
 	$(BIN)/$(service)
 

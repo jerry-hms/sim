@@ -14,9 +14,8 @@ import (
 	"sim/idl/pb/im"
 )
 
-var (
-	port = flag.String("port", "20002", "listening port")
-)
+// Port 监听端口
+var Port = "20001"
 
 func main() {
 	rpc.Init()
@@ -29,7 +28,7 @@ func main() {
 
 	grpcAddress := fmt.Sprintf("%s:%s",
 		variable.ConfigYml.GetStringSlice("services.im.host"),
-		*port)
+		Port)
 	chatNode := discovery.Server{
 		Name: variable.ConfigYml.GetString("services.im.name"),
 		Addr: grpcAddress,
@@ -38,17 +37,17 @@ func main() {
 	defer s.Stop()
 
 	// 将im rpc服务注册到对应的service中
-	im.RegisterImServiceServer(s, imSrv.GetImSrv())
+	im.RegisterImServiceServer(s, imSrv.GetImSrv(Port))
 	lis, err := net.Listen("tcp", grpcAddress)
 
 	if err != nil {
 		panic(err)
 	}
 	// 将当前user rpc服务注册到etcd中
-	if _, err := etcdRegister.Register(chatNode, 10); err != nil {
+	if _, err = etcdRegister.Register(chatNode, 10); err != nil {
 		panic(fmt.Sprintf("start server failed, err: %v", err))
 	}
-	if err := s.Serve(lis); err != nil {
+	if err = s.Serve(lis); err != nil {
 		panic(err)
 	}
 

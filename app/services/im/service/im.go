@@ -16,9 +16,11 @@ import (
 var ImSrv *Im
 var ImIns sync.Once
 
-func GetImSrv() *Im {
+func GetImSrv(port string) *Im {
 	ImIns.Do(func() {
-		ImSrv = &Im{}
+		ImSrv = &Im{
+			Port: port,
+		}
 	})
 
 	return ImSrv
@@ -27,6 +29,7 @@ func GetImSrv() *Im {
 // Im 即时聊天服务
 type Im struct {
 	*pb.UnimplementedImServiceServer
+	Port string
 }
 
 // Send 发送消息
@@ -47,7 +50,7 @@ func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, err
 	// 将消息投递到队列中
 	s := queue.Pusher("send_message", qMsg, "publish_subscribe", 0)
 	if s {
-		variable.ZapLog.Error("消息投递成功")
+		variable.ZapLog.Info(fmt.Sprintf("服务[%s]消息投递成功", i.Port))
 	}
 	sendResp := &pb.SendResponse{}
 	sendResp.MessageId = message.MessageId

@@ -36,7 +36,7 @@ func (m *Manage) GetClientIdByUid(uid uint64) (*Client, error) {
 	clientId := m.GetClientId(uid)
 	client := CreateHubFactory().GetClientByClientId(clientId)
 	if client == nil {
-		return nil, errors.New("客户端不存在")
+		return nil, errors.New("客户端未连接")
 	}
 	return client, nil
 }

@@ -13,9 +13,7 @@ import (
 	pb "sim/idl/pb/user"
 )
 
-var (
-	port = flag.String("port", "10002", "listening port")
-)
+var Port = "10001"
 
 func main() {
 	flag.Parse()
@@ -28,7 +26,7 @@ func main() {
 	// user rpc服务开启
 	grpcAddress := fmt.Sprintf("%s:%s",
 		variable.ConfigYml.GetStringSlice("services.user.host"),
-		*port)
+		Port)
 	userNode := discovery.Server{
 		Name: variable.ConfigYml.GetString("services.user.name"),
 		Addr: grpcAddress,
@@ -42,10 +40,10 @@ func main() {
 		panic(err)
 	}
 	// 将当前user rpc服务注册到etcd中
-	if _, err := etcdRegister.Register(userNode, 10); err != nil {
+	if _, err = etcdRegister.Register(userNode, 10); err != nil {
 		panic(fmt.Sprintf("start server failed, err: %v", err))
 	}
-	if err := s.Serve(lis); err != nil {
+	if err = s.Serve(lis); err != nil {
 		panic(err)
 	}
 
