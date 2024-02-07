@@ -69,4 +69,4 @@ make proto      // 生成rpc服务所需的protoc文件
 #### step2 启动各服务
 `make im && make user && make gateway`
 
-最后访问`http://localhost:1024`即可
+最后访问[http://localhost:1024](http://localhost:1024)即可
