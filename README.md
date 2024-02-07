@@ -46,7 +46,7 @@ sim /
 完善聊天内容的存储、离线消息处理机制、以及消息的多端同步等功能
 
 ### 配置文件
-将`config/config.yaml.example`拷贝致`config.yaml`，并且完善对应的配置修改即可
+将`config/config.yaml.example`拷贝至`config.yaml`，并且完善对应的配置修改即可
 > 注意：首次部署需访问rabbitmq管理端创建virtual host
 #### rabbitmq配置
 访问`http://127.0.0.1:15672`，找到`Virtual Hosts`创建`sim`虚拟主机，可参考[官方文档](https://www.rabbitmq.com/vhosts.html)
