@@ -34,17 +34,25 @@ type Im struct {
 
 // Send 发送消息
 func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, error) {
-	userReq := &userPb.UserInfoRequest{
-		Id: req.RecvId,
-	}
 	// 获取发送人信息
-	user, err := rpc.UserClient.UserInfo(c, userReq)
+	user, err := rpc.UserClient.UserInfo(c, &userPb.UserInfoRequest{
+		Id: req.SenderId,
+	})
 	if err != nil {
 		return nil, err
 	}
-
+	// 声明发送人
+	sender := struct {
+		UserId   uint64 `json:"user_id"`
+		NickName string `json:"nickname"`
+		Avatar   string `json:"avatar"`
+	}{
+		UserId:   user.Id,
+		NickName: user.NickName,
+		Avatar:   user.Avatar,
+	}
 	// 组合消息结构
-	message := imCore.CreateMessage().SetScene(req.Scene).SetSender(user).SetMessage(req).Parse()
+	message := imCore.CreateMessage().SetScene(req.Scene).SetSender(sender).SetMessage(req).Parse()
 	str, _ := json.Marshal(message)
 	qMsg := fmt.Sprintf(`{"recv_id": %d, "message": %s}`, req.RecvId, string(str))
 	// 将消息投递到队列中
@@ -52,6 +60,9 @@ func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, err
 	if s {
 		variable.ZapLog.Info(fmt.Sprintf("服务[%s]消息投递成功", i.Port))
 	}
+	// 处理会话数据
+	go CreateChat().Say(user, req.RecvId, message)
+
 	sendResp := &pb.SendResponse{}
 	sendResp.MessageId = message.MessageId
 

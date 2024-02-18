@@ -13,3 +13,7 @@ type Image struct {
 func (i *Image) ParseParams(msg map[string]interface{}) (interf.TypeInterface, error) {
 	return DataBindToType(msg, i)
 }
+
+func (i *Image) ParseContent() string {
+	return "[图片]"
+}

@@ -7,20 +7,22 @@ service ImService{
 }
 
 message SendRequest{
+  // @gotags: json:"sender_id" form:"sender_id"
+  uint64 SenderId = 1;
   // @gotags: json:"recv_id" form:"recv_id"
-  uint64 RecvId = 1;
+  uint64 RecvId = 2;
   // @gotags: json:"content" form:"content"
-  string Content = 2;
+  string Content = 3;
   // @gotags: json:"type" form:"type"
-  string Type = 3;
+  string Type = 4;
   // @gotags: json:"scene" form:"scene"
-  string Scene = 4;
+  string Scene = 5;
   // @gotags: json:"url" form:"url"
-  string Url = 5;
+  string Url = 6;
   // @gotags: json:"height" form:"height"
-  int64 Height = 6;
+  int64 Height = 7;
   // @gotags: json:"width" form:"width"
-  int64 Width = 7;
+  int64 Width = 8;
 }
 
 message SendResponse{

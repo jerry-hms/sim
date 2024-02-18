@@ -7,7 +7,7 @@ import (
 	"sim/app/util/encrypt"
 )
 
-type UserModel struct {
+type User struct {
 	BaseModel
 	Username string `gorm:"column:username;size:20" json:"username"`
 	Password string `gorm:"column:password;size:128" json:"password"`
@@ -16,17 +16,13 @@ type UserModel struct {
 	Mobile   string `gorm:"column:mobile;size:11" json:"mobile"`
 }
 
-func CreateUserFactory() *UserModel {
-	return &UserModel{BaseModel: BaseModel{DB: ConnDb()}}
-}
-
-func (u *UserModel) TableName() string {
-	return "user"
+func CreateUserFactory() *User {
+	return &User{BaseModel: BaseModel{DB: ConnDb()}}
 }
 
 // Register 注册
-func (u *UserModel) Register(user *UserModel) error {
-	var curUser UserModel
+func (u *User) Register(user *User) error {
+	var curUser User
 
 	u.Where("username = ?", user.Username).First(&curUser)
 	if curUser.Username == user.Username {
@@ -44,7 +40,7 @@ func (u *UserModel) Register(user *UserModel) error {
 }
 
 // Login 简单的登录
-func (u *UserModel) Login(username string, password string) (*UserModel, error) {
+func (u *User) Login(username string, password string) (*User, error) {
 	result := u.Where("username = ?", username).First(u)
 	if result.RowsAffected == 0 {
 		return nil, errors.New("用户不存在")
@@ -58,7 +54,7 @@ func (u *UserModel) Login(username string, password string) (*UserModel, error) 
 }
 
 // GetUserInfo GetInfo 获取用户数据
-func (u *UserModel) GetUserInfo(id uint64) (*UserModel, error) {
+func (u *User) GetUserInfo(id uint64) (*User, error) {
 	//sql := fmt.Sprintf("SELECT * FROM %s WHERE id = ? LIMIT 0,1", "user")
 	//sql := "SELECT * FROM user WHERE id = ? LIMIT 0,1"
 	mErr := u.Where("id = ?", id).First(u).Error

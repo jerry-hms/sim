@@ -50,5 +50,4 @@ func main() {
 	if err = s.Serve(lis); err != nil {
 		panic(err)
 	}
-
 }

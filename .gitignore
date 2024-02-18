@@ -5,3 +5,5 @@
 /storage/logs
 config/config.yml
 bin
+/tmp
+.air.toml

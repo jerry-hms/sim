@@ -5,12 +5,12 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"sim/app/services/im/core/types"
-	"sync"
 	"time"
 )
 
 func CreateMessage() *Message {
-	return &Message{}
+	m := &Message{}
+	return m
 }
 
 // Message 推送消息体
@@ -50,7 +50,7 @@ func (m *Message) GetMessageId() string {
 // SetSender 设置sender数据
 func (m *Message) SetSender(sender interface{}) *Message {
 	if m.Attachments == nil {
-		m.setAttachments()
+		m.Attachments = createAttachments()
 	}
 	m.Attachments.setSender(sender)
 	return m
@@ -83,25 +83,18 @@ func (m *Message) SetExtra(data interface{}) *Message {
 
 // Parse 解析消息体
 func (m *Message) Parse() *Message {
-	m.setAttachments()
 	m.setTime()
 	m.generateMessageId()
 
 	return m
 }
 
-var attIns *Attachments
-var attOnce sync.Once
-
 func createAttachments() *Attachments {
-	attOnce.Do(func() {
-		attIns = &Attachments{
-			Sender:  make(map[string]interface{}),
-			Message: make(map[string]interface{}),
-			Extra:   make(map[string]interface{}),
-		}
-	})
-	return attIns
+	return &Attachments{
+		Sender:  make(map[string]interface{}),
+		Message: make(map[string]interface{}),
+		Extra:   make(map[string]interface{}),
+	}
 }
 
 type Attachments struct {

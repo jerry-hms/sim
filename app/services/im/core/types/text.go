@@ -20,3 +20,7 @@ func (t *Text) ParseParams(msg map[string]interface{}) (interf.TypeInterface, er
 	}
 	return t, nil
 }
+
+func (t *Text) ParseContent() string {
+	return t.Content
+}

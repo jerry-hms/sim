@@ -26,7 +26,7 @@ func GetUserSrv(addr string) *UserSrv {
 
 // UserRegister 注册用户
 func (u *UserSrv) UserRegister(ctx context.Context, req *pb.UserRequest) (resp *pb.UserResponse, err error) {
-	user := &model.UserModel{
+	user := &model.User{
 		Username: req.UserName,
 		Password: req.Password,
 		Nickname: req.Nickname,
@@ -63,7 +63,7 @@ func (u *UserSrv) UserInfo(ctx context.Context, req *pb.UserInfoRequest) (*pb.Us
 }
 
 // 转换为响应数据
-func toResponse(user *model.UserModel) *pb.UserResponse {
+func toResponse(user *model.User) *pb.UserResponse {
 	resp := &pb.UserResponse{
 		Id:        user.Id,
 		NickName:  user.Nickname,

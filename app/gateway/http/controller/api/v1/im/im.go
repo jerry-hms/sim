@@ -3,6 +3,7 @@ package im
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"sim/app/gateway/http/controller/api"
 	"sim/app/gateway/rpc"
 	"sim/app/global/variable"
 	"sim/app/util/jwt"
@@ -35,14 +36,16 @@ func (c *ImControl) BindToWs(ctx *gin.Context) {
 
 // Send 聊天消息发送
 func (c *ImControl) Send(ctx *gin.Context) {
+	user := api.GetLoginUser(ctx)
 	req := &pb.SendRequest{
-		RecvId:  uint64(ctx.GetFloat64("recv_id")),
-		Content: ctx.GetString("content"),
-		Type:    ctx.GetString("type"),
-		Scene:   ctx.GetString("scene"),
-		Url:     ctx.GetString("url"),
-		Width:   int64(ctx.GetFloat64("width")),
-		Height:  int64(ctx.GetFloat64("height")),
+		SenderId: user.Id,
+		RecvId:   uint64(ctx.GetFloat64("recv_id")),
+		Content:  ctx.GetString("content"),
+		Type:     ctx.GetString("type"),
+		Scene:    ctx.GetString("scene"),
+		Url:      ctx.GetString("url"),
+		Width:    int64(ctx.GetFloat64("width")),
+		Height:   int64(ctx.GetFloat64("height")),
 	}
 
 	send, err := rpc.ImClient.Send(ctx, req)
