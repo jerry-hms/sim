@@ -1,6 +1,7 @@
 package variable
 
 import (
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 	"log"
 	"os"
@@ -33,7 +34,7 @@ var (
 	WebsocketManage interface{}
 
 	// 自行定义其他全局变量 ↓
-
+	Redis *redis.Client
 )
 
 func init() {

@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ImServiceClient interface {
 	Send(ctx context.Context, in *SendRequest, opts ...grpc.CallOption) (*SendResponse, error)
+	SessionList(ctx context.Context, in *SessionListRequest, opts ...grpc.CallOption) (*SessionListResponse, error)
+	LoadMessage(ctx context.Context, in *LoadRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type imServiceClient struct {
@@ -42,11 +45,31 @@ func (c *imServiceClient) Send(ctx context.Context, in *SendRequest, opts ...grp
 	return out, nil
 }
 
+func (c *imServiceClient) SessionList(ctx context.Context, in *SessionListRequest, opts ...grpc.CallOption) (*SessionListResponse, error) {
+	out := new(SessionListResponse)
+	err := c.cc.Invoke(ctx, "/ImService/SessionList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *imServiceClient) LoadMessage(ctx context.Context, in *LoadRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/ImService/LoadMessage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ImServiceServer is the server API for ImService service.
 // All implementations must embed UnimplementedImServiceServer
 // for forward compatibility
 type ImServiceServer interface {
 	Send(context.Context, *SendRequest) (*SendResponse, error)
+	SessionList(context.Context, *SessionListRequest) (*SessionListResponse, error)
+	LoadMessage(context.Context, *LoadRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedImServiceServer()
 }
 
@@ -56,6 +79,12 @@ type UnimplementedImServiceServer struct {
 
 func (UnimplementedImServiceServer) Send(context.Context, *SendRequest) (*SendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+}
+func (UnimplementedImServiceServer) SessionList(context.Context, *SessionListRequest) (*SessionListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SessionList not implemented")
+}
+func (UnimplementedImServiceServer) LoadMessage(context.Context, *LoadRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadMessage not implemented")
 }
 func (UnimplementedImServiceServer) mustEmbedUnimplementedImServiceServer() {}
 
@@ -88,6 +117,42 @@ func _ImService_Send_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ImService_SessionList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SessionListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImServiceServer).SessionList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ImService/SessionList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImServiceServer).SessionList(ctx, req.(*SessionListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ImService_LoadMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ImServiceServer).LoadMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ImService/LoadMessage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ImServiceServer).LoadMessage(ctx, req.(*LoadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ImService_ServiceDesc is the grpc.ServiceDesc for ImService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +163,14 @@ var ImService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Send",
 			Handler:    _ImService_Send_Handler,
+		},
+		{
+			MethodName: "SessionList",
+			Handler:    _ImService_SessionList_Handler,
+		},
+		{
+			MethodName: "LoadMessage",
+			Handler:    _ImService_LoadMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

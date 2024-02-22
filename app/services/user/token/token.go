@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sim/app/global/consts"
 	"sim/app/util/jwt"
-	userPb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 	"sync"
 	"time"
 )

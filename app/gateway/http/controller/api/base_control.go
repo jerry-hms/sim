@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"sim/app/util/jwt"
-	userPb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 )
 
 // GetLoginUser 获取登录的用户信息

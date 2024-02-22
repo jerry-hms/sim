@@ -11,7 +11,7 @@ import (
 	imSrv "sim/app/services/im/service"
 	"sim/app/util/discovery"
 	_ "sim/bootstrap"
-	"sim/idl/pb/im"
+	"sim/idl/im"
 )
 
 // Port 监听端口

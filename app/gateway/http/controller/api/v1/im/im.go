@@ -9,7 +9,7 @@ import (
 	"sim/app/util/jwt"
 	"sim/app/util/response"
 	"sim/app/util/websocket"
-	pb "sim/idl/pb/im"
+	pb "sim/idl/im"
 )
 
 type ImControl struct {
@@ -55,4 +55,15 @@ func (c *ImControl) Send(ctx *gin.Context) {
 	}
 
 	response.Success(ctx, "发送成功", send)
+}
+
+func (c *ImControl) SessionList(ctx *gin.Context) {
+	user := api.GetLoginUser(ctx)
+	req := &pb.SessionListRequest{
+		UserId:   user.Id,
+		Page:     int64(ctx.GetFloat64("page")),
+		PageSize: int64(ctx.GetFloat64("page_size")),
+	}
+	resp, _ := rpc.ImClient.SessionList(ctx, req)
+	response.Success(ctx, "操作成功", resp)
 }

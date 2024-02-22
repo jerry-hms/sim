@@ -25,15 +25,15 @@ type UserRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"username" json:"username"
+	 
 	UserName string `protobuf:"bytes,1,opt,name=UserName,proto3" json:"username" form:"username"`
-	// @gotags: form:"password" json:"password"
+	 
 	Password string `protobuf:"bytes,2,opt,name=Password,proto3" json:"password" form:"password"`
-	// @gotags: form:"nickname" json:"nickname"
+	 
 	Nickname string `protobuf:"bytes,3,opt,name=Nickname,proto3" json:"nickname" form:"nickname"`
-	// @gotags: form:"avatar" json:"avatar"
+	 
 	Avatar string `protobuf:"bytes,4,opt,name=Avatar,proto3" json:"avatar" form:"avatar"`
-	// @gotags: form:"mobile" json:"mobile"
+	 
 	Mobile string `protobuf:"bytes,5,opt,name=Mobile,proto3" json:"mobile" form:"mobile"`
 }
 
@@ -109,9 +109,9 @@ type UserLoginRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"username" json:"username"
+	 
 	Username string `protobuf:"bytes,1,opt,name=Username,proto3" json:"username" form:"username"`
-	// @gotags: form:"password" json:"password"
+	 
 	Password string `protobuf:"bytes,2,opt,name=Password,proto3" json:"password" form:"password"`
 }
 
@@ -166,7 +166,7 @@ type UserStreamRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"user_ids" json:"user_ids"
+	 
 	UserIds []int64 `protobuf:"varint,1,rep,packed,name=UserIds,json=user_ids,proto3" json:"user_ids" form:"user_ids"`
 }
 
@@ -214,9 +214,9 @@ type UserStreamResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"id"
+	 
 	Id uint64 `protobuf:"varint,1,opt,name=Id,json=id,proto3" json:"Id,omitempty" form:"id"`
-	// @gotags: form:"nickname"
+	 
 	NickName string `protobuf:"bytes,2,opt,name=NickName,json=nickname,proto3" json:"NickName,omitempty" form:"nickname"`
 }
 
@@ -271,15 +271,15 @@ type UserResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"id" json:"id"
+	 
 	Id uint64 `protobuf:"varint,1,opt,name=Id,proto3" json:"id" form:"id"`
-	// @gotags: form:"nickname" json:"nickname"
+	 
 	NickName string `protobuf:"bytes,2,opt,name=NickName,proto3" json:"nickname" form:"nickname"`
-	// @gotags: form:"avatar" json:"avatar"
+	 
 	Avatar string `protobuf:"bytes,3,opt,name=Avatar,proto3" json:"avatar" form:"avatar"`
-	// @gotags: form:"mobile" json:"mobile"
+	 
 	Mobile string `protobuf:"bytes,4,opt,name=Mobile,proto3" json:"mobile" form:"mobile"`
-	// @gotags: form:"created_at" json:"created_at"
+	 
 	CreatedAt string `protobuf:"bytes,5,opt,name=CreatedAt,proto3" json:"created_at" form:"created_at"`
 }
 
@@ -355,7 +355,7 @@ type UserInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// @gotags: form:"id" json:"id"
+	 
 	Id uint64 `protobuf:"varint,1,opt,name=Id,proto3" json:"id" form:"id"`
 }
 
@@ -443,8 +443,9 @@ var file_user_proto_rawDesc = []byte{
 	0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x2d, 0x0a, 0x08,
 	0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x10, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x49,
 	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x55, 0x73, 0x65,
-	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x0b, 0x5a, 0x09, 0x2e,
-	0x2f, 0x70, 0x62, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x0e, 0x5a, 0x0c, 0x73,
+	0x69, 0x6d, 0x2f, 0x69, 0x64, 0x6c, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (

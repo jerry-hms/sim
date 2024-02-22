@@ -37,4 +37,7 @@ func registerChatValidator() {
 	// 发送消息
 	key = consts.ValidatorPrefix + "Send"
 	cont.Set(key, &imValidator.Message{})
+	// 获取会话列表
+	key = consts.ValidatorPrefix + "SessionList"
+	cont.Set(key, &imValidator.SessionList{})
 }

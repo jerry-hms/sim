@@ -4,8 +4,11 @@ import (
 	"encoding/json"
 	"sim/app/global/variable"
 	"sim/app/model/common"
+	"sim/app/model/common/scopes"
 	"sim/app/services/im/core"
 	"sim/app/services/im/core/interf"
+	"sim/app/util/pagination"
+	"sim/app/util/tools"
 )
 
 func CreateImSessionFactory() *ImSession {
@@ -32,7 +35,7 @@ type ImSession struct {
 	UserId              uint64      `gorm:"column:user_id" json:"user_id"`
 	RelId               uint64      `gorm:"column:rel_id" json:"rel_id"`
 	SessionName         string      `gorm:"column:session_name" json:"session_name"`
-	SepSvr              string      `gorm:"column:sep_svr" json:"sep_svr"`
+	SepId               int64       `gorm:"column:sep_id" json:"sep_id"`
 	LastSenderInfo      common.JSON `gorm:"column:last_sender_info;type:json" json:"last_sender_info"`
 	LastMessage         string      `gorm:"column:last_message" json:"last_message"`
 	UnreadMessageNumber int16       `gorm:"column:unread_message_number" json:"unread_message_number"`
@@ -65,4 +68,14 @@ func (i *ImSession) GetSessionOrCreate(user_id uint64, rel_id uint64, name strin
 	}
 
 	return nil
+}
+
+func (i *ImSession) List(user_id uint64, p interface{}) *pagination.Pagination {
+	var sessions []*ImSession
+	var paginate pagination.Pagination
+	tools.InterfaceToStruct(p, &paginate)
+	q := i.Select("rel_id,session_name,sep_id,last_sender_info,last_message,unread_message_number,created_at")
+	q.Where("user_id = ?", user_id).Scopes(scopes.Paginate(&paginate)).Find(&sessions)
+	paginate.Rows = sessions
+	return &paginate
 }

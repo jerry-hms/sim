@@ -10,8 +10,8 @@ import (
 	"log"
 	"sim/app/global/variable"
 	"sim/app/util/discovery"
-	"sim/idl/pb/im"
-	"sim/idl/pb/user"
+	"sim/idl/im"
+	"sim/idl/user"
 	"time"
 )
 

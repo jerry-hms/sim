@@ -10,7 +10,7 @@ import (
 	userSrv "sim/app/services/user/service"
 	"sim/app/util/discovery"
 	_ "sim/bootstrap"
-	pb "sim/idl/pb/user"
+	pb "sim/idl/user"
 )
 
 var Port = "10001"

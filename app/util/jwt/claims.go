@@ -2,7 +2,7 @@ package jwt
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	userPb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 )
 
 type Claims struct {

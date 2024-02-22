@@ -5,7 +5,7 @@ import (
 	"sim/app/gateway/rpc"
 	"sim/app/services/user/token"
 	"sim/app/util/response"
-	userPb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 )
 
 type User struct {

@@ -8,8 +8,8 @@ import (
 	imCore "sim/app/services/im/core"
 	"sim/app/services/im/rpc"
 	"sim/app/util/queue"
-	pb "sim/idl/pb/im"
-	userPb "sim/idl/pb/user"
+	"sim/idl/im"
+	userPb "sim/idl/user"
 	"sync"
 )
 
@@ -28,12 +28,12 @@ func GetImSrv(port string) *Im {
 
 // Im 即时聊天服务
 type Im struct {
-	*pb.UnimplementedImServiceServer
+	*im.UnimplementedImServiceServer
 	Port string
 }
 
 // Send 发送消息
-func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, error) {
+func (i *Im) Send(c context.Context, req *im.SendRequest) (*im.SendResponse, error) {
 	// 获取发送人信息
 	user, err := rpc.UserClient.UserInfo(c, &userPb.UserInfoRequest{
 		Id: req.SenderId,
@@ -63,8 +63,37 @@ func (i *Im) Send(c context.Context, req *pb.SendRequest) (*pb.SendResponse, err
 	// 处理会话数据
 	go CreateChat().Say(user, req.RecvId, message)
 
-	sendResp := &pb.SendResponse{}
+	sendResp := &im.SendResponse{}
 	sendResp.MessageId = message.MessageId
 
 	return sendResp, nil
+}
+
+// SessionList 会话列表数据
+func (i *Im) SessionList(ctx context.Context, req *im.SessionListRequest) (*im.SessionListResponse, error) {
+	list, err := CreateSessionServiceFactory().List(req.UserId, req)
+	if err != nil {
+		return nil, err
+	}
+	response := &im.SessionListResponse{}
+	response.Page = int64(list.Page)
+	response.PageSize = int64(list.PageSize)
+	response.TotalRows = list.TotalRows
+	response.TotalPages = int64(list.TotalPages)
+	rows, _ := list.Rows.([]*Session)
+	for _, item := range rows {
+		var info *im.LastSenderInfo
+		_ = json.Unmarshal(item.LastSenderInfo, &info)
+		response.Rows = append(response.Rows, &im.Session{
+			RelId:               item.RelId,
+			SessionName:         item.SessionName,
+			SepId:               item.SepId,
+			LastSenderInfo:      info,
+			LastMessage:         item.LastMessage,
+			UnreadMessageNumber: uint32(item.UnreadMessageNumber),
+			CreatedAt:           item.CreatedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+
+	return response, nil
 }

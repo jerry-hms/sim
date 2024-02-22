@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 	"sim/app/model"
-	pb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 	"sync"
 )
 
@@ -11,7 +11,7 @@ var UserSrvIns *UserSrv
 var UserSrvOnce sync.Once
 
 type UserSrv struct {
-	pb.UnimplementedUserServiceServer
+	userPb.UnimplementedUserServiceServer
 	NodeAddr string
 }
 
@@ -25,7 +25,7 @@ func GetUserSrv(addr string) *UserSrv {
 }
 
 // UserRegister 注册用户
-func (u *UserSrv) UserRegister(ctx context.Context, req *pb.UserRequest) (resp *pb.UserResponse, err error) {
+func (u *UserSrv) UserRegister(ctx context.Context, req *userPb.UserRequest) (resp *userPb.UserResponse, err error) {
 	user := &model.User{
 		Username: req.UserName,
 		Password: req.Password,
@@ -43,7 +43,7 @@ func (u *UserSrv) UserRegister(ctx context.Context, req *pb.UserRequest) (resp *
 }
 
 // UserLogin 用户登录
-func (u *UserSrv) UserLogin(ctx context.Context, req *pb.UserLoginRequest) (resp *pb.UserResponse, err error) {
+func (u *UserSrv) UserLogin(ctx context.Context, req *userPb.UserLoginRequest) (resp *userPb.UserResponse, err error) {
 	user, err := model.CreateUserFactory().Login(req.Username, req.Password)
 	if err != nil {
 		return
@@ -53,7 +53,7 @@ func (u *UserSrv) UserLogin(ctx context.Context, req *pb.UserLoginRequest) (resp
 	return
 }
 
-func (u *UserSrv) UserInfo(ctx context.Context, req *pb.UserInfoRequest) (*pb.UserResponse, error) {
+func (u *UserSrv) UserInfo(ctx context.Context, req *userPb.UserInfoRequest) (*userPb.UserResponse, error) {
 	info, err := model.CreateUserFactory().GetUserInfo(req.Id)
 	if err != nil {
 		return nil, err
@@ -63,8 +63,8 @@ func (u *UserSrv) UserInfo(ctx context.Context, req *pb.UserInfoRequest) (*pb.Us
 }
 
 // 转换为响应数据
-func toResponse(user *model.User) *pb.UserResponse {
-	resp := &pb.UserResponse{
+func toResponse(user *model.User) *userPb.UserResponse {
+	resp := &userPb.UserResponse{
 		Id:        user.Id,
 		NickName:  user.Nickname,
 		Avatar:    user.Avatar,

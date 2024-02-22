@@ -1,0 +1,14 @@
+syntax = "proto3";
+package common.page;
+
+option go_package = "sim/idl/common";
+
+message PageModel{
+  // @gotags: json:"page" form:"page"
+  int64 Page = 1;
+  // @gotags: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @gotags: json:"total" form:"total"
+  int64 TotalRows = 3;
+  int64 TotalPages = 4;
+}

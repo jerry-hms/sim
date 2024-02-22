@@ -51,12 +51,14 @@ func RegisterRoute() *gin.Engine {
 		}
 
 		// im相关接口
-		chat := api.Group("/im").Use(authorization.CheckLogin)
+		im := api.Group("/im").Use(authorization.CheckLogin)
 		{
 			// 客户端绑定到ws服务
-			chat.POST("bind-ws", ValidatorFactory.Create(consts.ValidatorPrefix+"ChatBind"))
+			im.POST("bind-ws", ValidatorFactory.Create(consts.ValidatorPrefix+"ChatBind"))
 			// 消息发送接口
-			chat.POST("send", ValidatorFactory.Create(consts.ValidatorPrefix+"Send"))
+			im.POST("send", ValidatorFactory.Create(consts.ValidatorPrefix+"Send"))
+			// 会话列表接口
+			im.GET("session-list", ValidatorFactory.Create(consts.ValidatorPrefix+"SessionList"))
 		}
 	}
 

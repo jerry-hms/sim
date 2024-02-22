@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "sim/idl/im";
+
+service ImService{
+  rpc Send(SendRequest) returns(SendResponse);
+  rpc SessionList(SessionListRequest) returns(SessionListResponse);
+  rpc LoadMessage(LoadRequest) returns(google.protobuf.Empty);
+}
+
+message SendRequest{
+  // @gotags: json:"sender_id" form:"sender_id"
+  uint64 SenderId = 1;
+  // @gotags: json:"recv_id" form:"recv_id"
+  uint64 RecvId = 2;
+  // @gotags: json:"content" form:"content"
+  string Content = 3;
+  // @gotags: json:"type" form:"type"
+  string Type = 4;
+  // @gotags: json:"scene" form:"scene"
+  string Scene = 5;
+  // @gotags: json:"url" form:"url"
+  string Url = 6;
+  // @gotags: json:"height" form:"height"
+  int64 Height = 7;
+  // @gotags: json:"width" form:"width"
+  int64 Width = 8;
+}
+
+message SendResponse{
+  // @gotags: json:"message_id" form:"message_id"
+  string MessageId = 1;
+}
+
+message SessionListRequest{
+  // @gotags: json:"page" form:"page"
+  int64 Page = 1;
+  // @gotags: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @gotags: json:"user_id" form:"user_id"
+  uint64 UserId = 3;
+}
+
+message LastSenderInfo{
+  // @gotags: json:"user_id" form:"user_id"
+  uint64 UserId = 1;
+  // @gotags: json:"avatar" form:"avatar"
+  string Avatar = 2;
+  // @gotags: json:"nickname" form:"nickname"
+  string Nickname = 3;
+}
+
+message Session{
+  // @gotags: json:"rel_id" form:"rel_id"
+  uint64 RelId = 1;
+  // @gotags: json:"session_name" form:"session_name"
+  string SessionName = 2;
+  // @gotags: json:"sep_id" form:"sep_id"
+  int64 SepId = 3;
+  // @gotags: json:"last_sender_info" form:"last_sender_info"
+  LastSenderInfo LastSenderInfo = 4;
+  // @gotags: json:"last_message" form:"last_message"
+  string LastMessage = 5;
+  // @gotags: json:"unread_message_number" form:"unread_message_number"
+  uint32 UnreadMessageNumber = 6;
+  // @gotags: json:"created_at" form:"created_at"
+  string CreatedAt = 7;
+}
+
+message SessionListResponse{
+  // @gotags: json:"page" form:"page"
+  int64 Page = 1;
+  // @gotags: json:"page_size" form:"page_size"
+  int64 PageSize = 2;
+  // @gotags: json:"total" form:"total"
+  int64 TotalRows = 3;
+  // @gotags: json:"total_pages" form:"total_pages"
+  int64 TotalPages = 4;
+  // @gotags: json:"rows" form:"rows"
+  repeated Session Rows = 5;
+}
+
+message LoadRequest{
+  // @gotags: json:"user_id" form:"user_id"
+  uint64 UserId = 1;
+  // @gotags: json:"session_id" form:"session_id"
+  uint64 SessionId = 2;
+  // @gotags: json:"sep_id" form:"sep_id"
+  string SepId = 3;
+}

@@ -6,7 +6,7 @@ import (
 	userV1 "sim/app/gateway/http/controller/api/v1/user"
 	"sim/app/gateway/http/validator/core/data_transfer"
 	"sim/app/util/response"
-	userPb "sim/idl/pb/user"
+	userPb "sim/idl/user"
 )
 
 type Register struct {

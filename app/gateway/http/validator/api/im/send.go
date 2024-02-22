@@ -24,15 +24,6 @@ func (m *Message) CheckParams(c *gin.Context) {
 		return
 	}
 
-	//verify, err := verify_params.Verify(m)
-	//if err != nil {
-	//	response.ValidatorFail(c, "验证器故障")
-	//	return
-	//}
-	//if verify != "" {
-	//	response.ValidatorFail(c, verify)
-	//	return
-	//}
 	if context := data_transfer.DataAddContext(m, "", c); context != nil {
 		(&imControl.ImControl{}).Send(c)
 	} else {

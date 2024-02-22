@@ -1,4 +1,5 @@
 DIR = $(shell pwd)/app
+GOPATH := $(shell go env GOPATH)
 
 IDL_PATH = $(shell pwd)/idl
 PORT ?= 10001
@@ -12,10 +13,12 @@ BIN = $(shell pwd)/bin
 
 .PHONY: proto
 proto:
-	@for file in $(IDL_PATH)/*.proto; do \
-		protoc -I $(IDL_PATH) $$file --go-grpc_out=$(IDL_PATH) --go_out=$(IDL_PATH); \
+	@for dir in $(IDL_PATH)/*; do \
+		for file in $$dir/*.proto; do \
+			protoc -I $$dir $$file --proto_path=.:$(GOPATH)/src:../ --go-grpc_out=../ --go_out=../; \
+		done; \
+		find $$dir -type f -name '*.pb.go' -exec protoc-go-inject-tag -input {} -remove_tag_comment \;; \
 	done
-	@find $(IDL_PATH)/pb/* -type f -name '*.pb.go' -exec protoc-go-inject-tag -input {} \;
 
 .PHONY: $(SERVICES)
 $(SERVICES):
