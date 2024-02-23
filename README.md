@@ -7,6 +7,7 @@
 - etcd
 - gorm
 - websocket
+- redis
 - jwt-go
 - zap
 - rabbitmq
