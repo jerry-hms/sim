@@ -71,7 +71,7 @@ func (i *Im) Send(c context.Context, req *im.SendRequest) (*im.SendResponse, err
 
 // SessionList 会话列表数据
 func (i *Im) SessionList(ctx context.Context, req *im.SessionListRequest) (*im.SessionListResponse, error) {
-	list, err := CreateSessionServiceFactory().List(req.UserId, req)
+	list, err := CreateSessionServiceFactory().List(req.UserId, int(req.Page), int(req.PageSize), "desc")
 	if err != nil {
 		return nil, err
 	}

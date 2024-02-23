@@ -123,6 +123,12 @@ github.com/gorilla/websocket v1.5.1 h1:gmztn0JnHVt9JZquRuzLw3g4wouNVzKL15iLr/zn/
 github.com/gorilla/websocket v1.5.1/go.mod h1:x3kM2JMyaluk02fnUJpQuwD2dCS5NDG2ZHL0uE0tcaY=
 github.com/hashicorp/hcl v1.0.0 h1:0Anlzjpi4vEasTeNFn2mLJgTSwt0+6sfsiTG8qcWGx4=
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
+github.com/jerry-hms/redis-pagination v0.1.0 h1:c8pt9fxJzbaMrXUcFRjAQ5mQ/tCSrGGInH+XIPQEwkY=
+github.com/jerry-hms/redis-pagination v0.1.0/go.mod h1:n3RS1VEyeuwdurQo9IBcpfWXwRaeQzuZhI1xCFXzDWM=
+github.com/jerry-hms/redis-pagination v0.1.2 h1:uO+BLs7X9Ix87w8qfEvqHNvD7Sn8W3HM8yhHW8eVHyI=
+github.com/jerry-hms/redis-pagination v0.1.2/go.mod h1:n3RS1VEyeuwdurQo9IBcpfWXwRaeQzuZhI1xCFXzDWM=
+github.com/jerry-hms/redis-pagination v0.1.3 h1:+XNcDuwqQinwrr23NWi9M/49CZVhPGVlHhQPkU8MtJY=
+github.com/jerry-hms/redis-pagination v0.1.3/go.mod h1:n3RS1VEyeuwdurQo9IBcpfWXwRaeQzuZhI1xCFXzDWM=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=

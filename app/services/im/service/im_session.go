@@ -1,23 +1,23 @@
 package service
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
-	baseRedis "github.com/go-redis/redis/v8"
 	"sim/app/global/consts"
 	"sim/app/global/variable"
 	"sim/app/model/common"
 	"sim/app/services/im/core"
 	"sim/app/services/im/core/interf"
 	"sim/app/util/pagination"
-	"sim/app/util/redis"
-	"sim/app/util/tools"
 	"time"
 )
 
 func CreateSessionServiceFactory() *Session {
 	return &Session{}
+}
+
+func getHashDb() {
+
 }
 
 func GetSessionCacheKey(user_id uint64) string {
@@ -70,70 +70,50 @@ func (s *Session) UnmarshalBinary(data []byte) error {
 
 // GetSessionOrCreate 获取会话，如果会话不存在就创建，并且更新会话数据
 func (s *Session) GetSessionOrCreate(user_id uint64, rel_id uint64, name string, message *core.Message, unread_message_number int16) error {
-	senderInfo, _ := json.Marshal(message.Attachments.Sender)
-	rdb := redis.ConnRedis()
-	ets := rdb.HExists(context.Background(), GetSessionCacheKey(user_id), GetSessionCacheField(rel_id))
-	var err error
-	if !ets.Val() {
-		s.UserId = user_id
-		s.RelId = rel_id
-		s.SessionName = name
-		s.LastSenderInfo = senderInfo
-		s.LastMessage = parseLastMessage(message)
-		s.UnreadMessageNumber = unread_message_number
-		s.CreatedAt = time.Now()
-		s.UpdatedAt = time.Now()
-		jsonStr, _ := json.Marshal(s)
+	rdb := pagination.GetHashDb().SetHashTable(GetSessionCacheKey(user_id)).SetHashField(GetSessionCacheField(rel_id))
 
-		// 数据存入redis
-		if err = rdb.HSet(context.Background(), GetSessionCacheKey(user_id), GetSessionCacheField(rel_id), string(jsonStr)).Err(); err != nil {
-			return err
-		}
-		// 再存入对应的排序方便做分页查询
-		sort := rdb.HLen(context.Background(), GetSessionCacheKey(user_id)).Val()
-		item := &baseRedis.Z{
-			Score:  float64(sort),
-			Member: GetSessionCacheField(rel_id),
-		}
-		rdb.ZAdd(context.Background(), GetSessionSortKey(user_id), item)
-	} else {
-		if err = rdb.HGet(context.Background(), GetSessionCacheKey(user_id), GetSessionCacheField(rel_id)).Scan(s); err != nil {
-			return err
-		}
-		s.SessionName = name
-		s.LastSenderInfo = senderInfo
-		s.LastMessage = parseLastMessage(message)
-		s.UnreadMessageNumber = s.UnreadMessageNumber + unread_message_number
-		s.UpdatedAt = time.Now()
-		jsonStr, _ := json.Marshal(s)
-
-		if err = rdb.HSet(context.Background(), GetSessionCacheKey(user_id), GetSessionCacheField(rel_id), string(jsonStr)).Err(); err != nil {
-			return err
-		}
+	result, err := rdb.First()
+	if err != nil {
+		return err
 	}
 
-	return nil
+	senderInfo, _ := json.Marshal(message.Attachments.Sender)
+	s.UserId = user_id
+	s.RelId = rel_id
+	s.SessionName = name
+	s.LastSenderInfo = senderInfo
+	s.LastMessage = parseLastMessage(message)
+	s.UpdatedAt = time.Now()
+	if result != "" {
+		_ = json.Unmarshal([]byte(result), s)
+		s.UnreadMessageNumber = s.UnreadMessageNumber + unread_message_number
+		s.UpdatedAt = time.Now()
+	} else {
+		s.UnreadMessageNumber = unread_message_number
+		s.CreatedAt = time.Now()
+	}
+	err = rdb.SetHashTable(GetSessionCacheKey(user_id)).SetHashField(GetSessionCacheField(rel_id)).Store(s)
+	return err
 }
 
 // List 获取会话列表数据
-func (s *Session) List(user_id uint64, p interface{}) (*pagination.Pagination, error) {
+func (s *Session) List(user_id uint64, page int, page_size int, sort string) (*pagination.Pagination, error) {
 	var sessions []*Session
-	var session Session
-	var paginate pagination.Pagination
+	var session *Session
+	paginate := pagination.Pagination{}
 
-	_ = tools.InterfaceToStruct(p, paginate)
-	rdb := redis.ConnRedis()
-	// 计算分页总页数
-	paginate.CountTotalPages(rdb.HLen(context.Background(), GetSessionCacheKey(user_id)).Val())
-	// 获取会话的排序,并且分页
-	keys, _ := rdb.ZRevRange(context.Background(), GetSessionSortKey(user_id), int64(paginate.GetOffset()), int64(paginate.GetEnd())).Result()
-	for _, key := range keys {
-		// 从redis中取出会话数据
-		if err := rdb.HGet(context.Background(), GetSessionCacheKey(user_id), key).Scan(&session); err != nil {
-			return nil, err
-		}
-		sessions = append(sessions, &session)
+	rp, err := pagination.GetHashDb().SetHashTable(GetSessionCacheKey(user_id)).Paginate(page, page_size, "desc")
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range rp.Rows {
+		_ = json.Unmarshal([]byte(item), &session)
+		sessions = append(sessions, session)
 	}
 	paginate.Rows = sessions
+	paginate.Page = rp.Page
+	paginate.PageSize = rp.Limit
+	paginate.TotalRows = rp.TotalRows
+	paginate.TotalPages = rp.TotalPages
 	return &paginate, nil
 }

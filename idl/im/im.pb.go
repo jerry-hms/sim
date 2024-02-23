@@ -188,7 +188,7 @@ type SessionListRequest struct {
 	 
 	Page int64 `protobuf:"varint,1,opt,name=Page,proto3" json:"page" form:"page"`
 	 
-	PageSize int64 `protobuf:"varint,2,opt,name=PageSize,proto3" json:"page_size" form:"page_size"`
+	PageSize int64 `protobuf:"varint,2,opt,name=Limit,proto3" json:"page_size" form:"page_size"`
 	 
 	UserId uint64 `protobuf:"varint,3,opt,name=UserId,proto3" json:"user_id" form:"user_id"`
 }
@@ -422,7 +422,7 @@ type SessionListResponse struct {
 	 
 	Page int64 `protobuf:"varint,1,opt,name=Page,proto3" json:"page" form:"page"`
 	 
-	PageSize int64 `protobuf:"varint,2,opt,name=PageSize,proto3" json:"page_size" form:"page_size"`
+	PageSize int64 `protobuf:"varint,2,opt,name=Limit,proto3" json:"page_size" form:"page_size"`
 	 
 	TotalRows int64 `protobuf:"varint,3,opt,name=TotalRows,proto3" json:"total" form:"total"`
 	 
